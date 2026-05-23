@@ -1,2 +1,14 @@
 import { defineConfig } from 'vitest/config';
-export default defineConfig({ test: { environment: 'jsdom' } });
+import { fileURLToPath } from 'url';
+
+export default defineConfig({
+  test: {
+    environment: 'jsdom',
+  },
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('.', import.meta.url)),
+    },
+  },
+});
+

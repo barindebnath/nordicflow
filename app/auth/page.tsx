@@ -1,0 +1,1 @@
+export default function AuthPage() { return <main className="p-10"><h1 className="text-3xl font-semibold">Sign in with GitHub</h1><p className="mt-2 text-slate-300">OAuth integration endpoint is scaffolded and ready.</p></main>; }

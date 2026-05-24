@@ -81,10 +81,11 @@ export default function SettingsPage() {
             </div>
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[11px] text-slate-400 font-medium mb-1.5">
+                <label htmlFor="leadTimeThreshold" className="block text-[11px] text-slate-400 font-medium mb-1.5">
                   Lead Time Alert Threshold (Hours)
                 </label>
                 <input 
+                  id="leadTimeThreshold"
                   type="number" 
                   className="w-full bg-[#0B1020] border border-[#243041] rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
                   {...register('leadTimeThreshold', { 
@@ -98,10 +99,11 @@ export default function SettingsPage() {
                 )}
               </div>
               <div>
-                <label className="block text-[11px] text-slate-400 font-medium mb-1.5">
+                <label htmlFor="prSizeTarget" className="block text-[11px] text-slate-400 font-medium mb-1.5">
                   PR Size target (Lines of Code)
                 </label>
                 <input 
+                  id="prSizeTarget"
                   type="number" 
                   className="w-full bg-[#0B1020] border border-[#243041] rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
                   {...register('prSizeTarget', { 
@@ -158,8 +160,10 @@ export default function SettingsPage() {
               <RefreshCw className="h-4 w-4" /> Repository Synchronization
             </div>
             <div className="max-w-xs">
-              <label className="block text-[11px] text-slate-400 font-medium mb-1.5">Automatic Sync Interval</label>
+              <label htmlFor="syncSchedule" className="block text-[11px] text-slate-400 font-medium mb-1.5">Automatic Sync Interval</label>
               <select 
+                id="syncSchedule"
+                aria-label="Automatic Sync Interval"
                 className="w-full bg-[#0B1020] border border-[#243041] rounded-lg px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-blue-500 focus:ring-0"
                 {...register('syncSchedule')}
               >

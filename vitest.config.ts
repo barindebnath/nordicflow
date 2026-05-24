@@ -4,6 +4,10 @@ import { fileURLToPath } from 'url';
 export default defineConfig({
   test: {
     environment: 'jsdom',
+    globals: true,
+  },
+  esbuild: {
+    jsx: 'automatic',
   },
   resolve: {
     alias: {
@@ -11,4 +15,3 @@ export default defineConfig({
     },
   },
 });
-

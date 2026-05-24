@@ -6,12 +6,9 @@ import { MetricCard } from '@/components/dashboard/metric-card';
 import { useStore } from '@/lib/store/useStore';
 import Link from 'next/link';
 import { 
-  AreaChart, 
+  ComposedChart, 
   Area, 
-  LineChart, 
   Line, 
-  BarChart, 
-  Bar, 
   XAxis, 
   YAxis, 
   Tooltip, 
@@ -110,6 +107,7 @@ export default function DashboardPage() {
               <select 
                 value={filterRepo} 
                 onChange={(e) => setFilterRepo(e.target.value)}
+                aria-label="Filter repositories"
                 className="bg-transparent text-slate-200 border-none outline-none font-medium cursor-pointer focus:ring-0"
               >
                 <option value="all">All Repositories</option>
@@ -178,7 +176,7 @@ export default function DashboardPage() {
               <div className="h-64 w-full">
                 {mounted ? (
                   <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={sprintData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+                    <ComposedChart data={sprintData} margin={{ top: 10, right: -5, left: -20, bottom: 0 }}>
                       <defs>
                         <linearGradient id="colorDx" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.2}/>
@@ -187,15 +185,16 @@ export default function DashboardPage() {
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="#1F2937" vertical={false} />
                       <XAxis dataKey="name" stroke="#64748b" fontSize={10} tickLine={false} />
-                      <YAxis stroke="#64748b" fontSize={10} tickLine={false} />
+                      <YAxis yAxisId="left" stroke="#3b82f6" fontSize={10} tickLine={false} domain={[0, 100]} />
+                      <YAxis yAxisId="right" orientation="right" stroke="#10b981" fontSize={10} tickLine={false} domain={[0, 5]} />
                       <Tooltip 
                         contentStyle={{ backgroundColor: '#111827', borderColor: '#243041', borderRadius: '8px' }} 
                         labelStyle={{ color: '#94a3b8', fontSize: '11px', fontWeight: '600' }}
                         itemStyle={{ color: '#f3f4f6', fontSize: '12px' }}
                       />
-                      <Area type="monotone" dataKey="dxScore" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#colorDx)" name="DX Score" />
-                      <Line type="monotone" dataKey="leadTime" stroke="#10b981" strokeWidth={2} name="Lead Time (Days)" />
-                    </AreaChart>
+                      <Area yAxisId="left" type="monotone" dataKey="dxScore" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#colorDx)" name="DX Score" />
+                      <Line yAxisId="right" type="monotone" dataKey="leadTime" stroke="#10b981" strokeWidth={2} name="Lead Time (Days)" />
+                    </ComposedChart>
                   </ResponsiveContainer>
                 ) : (
                   <div className="h-full bg-slate-900/50 animate-pulse rounded-xl"></div>

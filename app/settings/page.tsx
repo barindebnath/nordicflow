@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { AppShell } from '@/components/layout/app-shell';
 import { useStore, Settings } from '@/lib/store/useStore';
 import { useForm } from 'react-hook-form';
@@ -18,6 +18,7 @@ export default function SettingsPage() {
   const { settings, updateSettings, resetToDemo } = useStore();
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [resetSuccess, setResetSuccess] = useState(false);
+  const confirmRef = useRef<HTMLDialogElement>(null);
 
   const { 
     register, 
@@ -40,11 +41,14 @@ export default function SettingsPage() {
   };
 
   const handleResetSandbox = () => {
-    if (confirm('Are you sure you want to reset all repositories, PR logs, and settings to the default Northwind Labs demo data?')) {
-      resetToDemo();
-      setResetSuccess(true);
-      setTimeout(() => setResetSuccess(false), 3000);
-    }
+    confirmRef.current?.showModal();
+  };
+
+  const handleConfirmReset = () => {
+    resetToDemo();
+    setResetSuccess(true);
+    confirmRef.current?.close();
+    setTimeout(() => setResetSuccess(false), 3000);
   };
 
   return (
@@ -192,6 +196,32 @@ export default function SettingsPage() {
             <Trash2 className="h-4 w-4" /> Reset Demo Sandbox
           </button>
         </div>
+        {/* Native confirmation Dialog */}
+        <dialog 
+          ref={confirmRef} 
+          className="rounded-2xl border border-[#243041] bg-[#111827] p-6 max-w-md outline-none backdrop:bg-slate-950/70 backdrop:backdrop-blur-sm text-slate-100"
+        >
+          <form method="dialog" className="space-y-4">
+            <h3 className="text-base font-bold flex items-center gap-2 text-red-400">
+              <Trash2 className="h-5 w-5" /> Confirm Sandbox Reset
+            </h3>
+            <p className="text-xs text-slate-400 leading-normal">
+              Are you sure you want to reset all repositories, PR logs, and settings to the default Northwind Labs demo data? This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3 pt-2">
+              <button value="cancel" className="px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200">
+                Cancel
+              </button>
+              <button 
+                type="button" 
+                onClick={handleConfirmReset} 
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-xs font-semibold transition-colors"
+              >
+                Reset Sandbox
+              </button>
+            </div>
+          </form>
+        </dialog>
       </div>
     </AppShell>
   );

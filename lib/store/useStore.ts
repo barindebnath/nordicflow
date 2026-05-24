@@ -2,6 +2,30 @@ import { create } from 'zustand';
 import { Repo, PullRequest, Build } from '@/lib/types';
 import { repos as initialRepos, pullsByRepo as initialPulls, buildsByRepo as initialBuilds } from '@/lib/data/mock-data';
 
+// INP optimization helper: runs heavy CPU simulation yielding control back to main thread periodically
+async function analyzeCodebaseComplexity(complexityWeight: number) {
+  let deadline = performance.now() + 50; // 50ms budget
+  let result = 0;
+  
+  for (let i = 0; i < complexityWeight; i++) {
+    // Heavy math calculations to simulate analysis
+    for (let j = 0; j < 150000; j++) {
+      result += Math.sin(j) * Math.cos(j);
+    }
+    
+    // Yield execution to prevent UI-blocking Long Tasks
+    if (performance.now() >= deadline) {
+      if (typeof window !== 'undefined' && 'scheduler' in window && 'yield' in (window.scheduler as any)) {
+        await (window.scheduler as any).yield();
+      } else {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      }
+      deadline = performance.now() + 50; // Reset budget
+    }
+  }
+  return result;
+}
+
 export interface User {
   username: string;
   name: string;
@@ -152,6 +176,7 @@ export const useStore = create<StoreState>((set, get) => ({
     const steps = 10;
     for (let i = 1; i <= steps; i++) {
       await new Promise((resolve) => setTimeout(resolve, 200));
+      await analyzeCodebaseComplexity(30); // Yielding CPU calculations to keep UI thread unblocked
       set((state) => ({
         syncStatus: {
           ...state.syncStatus,

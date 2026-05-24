@@ -3,3 +3,38 @@
 @tailwind utilities;
 :root { color-scheme: dark; }
 body { @apply bg-slate-950 text-slate-100 antialiased; }
+
+/* CSS Anchor Positioning & Popover API */
+#bell-button {
+  anchor-name: --bell-button;
+}
+
+#notifications-dropdown {
+  position-anchor: --bell-button;
+  position-area: block-end span-inline-end;
+  position-try-fallbacks: flip-block, flip-inline;
+  inset: auto;
+  margin-top: 0.6rem;
+}
+
+#notifications-dropdown:popover-open {
+  display: block;
+}
+
+/* Container Queries for Repository Cards */
+.repo-card-container {
+  container-type: inline-size;
+}
+
+.repo-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+@container (min-width: 450px) {
+  .repo-card {
+    /* Add subtle padding or adjustment when the container is wide */
+    box-shadow: 0 4px 20px -2px rgba(59, 130, 246, 0.05);
+  }
+}

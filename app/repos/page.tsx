@@ -143,71 +143,72 @@ export default function ReposPage() {
             filteredRepos.map((repo) => {
               const isSyncingCurrent = syncStatus.syncing && syncStatus.currentRepo === repo.name;
               return (
-                <article 
-                  key={repo.id} 
-                  className="rounded-xl border border-[#243041] bg-[#111827] p-5 hover:border-slate-700 transition-all flex flex-col justify-between"
-                >
-                  <div className="space-y-4">
-                    {/* Repo Title and DX Score */}
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[10px] text-slate-500 font-medium font-mono uppercase tracking-wider">{repo.owner}</span>
+                <div key={repo.id} className="repo-card-container">
+                  <article 
+                    className="repo-card rounded-xl border border-[#243041] bg-[#111827] p-5 hover:border-slate-700 transition-all flex flex-col justify-between"
+                  >
+                    <div className="space-y-4">
+                      {/* Repo Title and DX Score */}
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[10px] text-slate-500 font-medium font-mono uppercase tracking-wider">{repo.owner}</span>
+                          </div>
+                          <h3 className="text-base font-semibold text-slate-200 mt-0.5">{repo.name}</h3>
                         </div>
-                        <h3 className="text-base font-semibold text-slate-200 mt-0.5">{repo.name}</h3>
+                        <div className={`px-2.5 py-1 rounded-lg border text-xs font-bold ${getScoreColor(repo.dxScore)}`}>
+                          DX Score: {repo.dxScore}/100
+                        </div>
                       </div>
-                      <div className={`px-2.5 py-1 rounded-lg border text-xs font-bold ${getScoreColor(repo.dxScore)}`}>
-                        DX Score: {repo.dxScore}/100
+
+                      {/* Stats details */}
+                      <div className="grid grid-cols-2 gap-4 border-t border-b border-[#243041]/50 py-3 text-xs font-medium">
+                        <div>
+                          <p className="text-slate-500 text-[10px] uppercase font-semibold">Active PRs</p>
+                          <p className="text-slate-200 mt-1 flex items-center gap-1">
+                            <GitBranch className="h-3.5 w-3.5 text-blue-400" /> {repo.openPrs} open
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-slate-500 text-[10px] uppercase font-semibold">Deploy Frequency</p>
+                          <p className="text-slate-200 mt-1 font-mono">{repo.deployFreq} / month</p>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Stats details */}
-                    <div className="grid grid-cols-2 gap-4 border-t border-b border-[#243041]/50 py-3 text-xs font-medium">
-                      <div>
-                        <p className="text-slate-500 text-[10px] uppercase font-semibold">Active PRs</p>
-                        <p className="text-slate-200 mt-1 flex items-center gap-1">
-                          <GitBranch className="h-3.5 w-3.5 text-blue-400" /> {repo.openPrs} open
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-slate-500 text-[10px] uppercase font-semibold">Deploy Frequency</p>
-                        <p className="text-slate-200 mt-1 font-mono">{repo.deployFreq} / month</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex items-center justify-between mt-5 gap-3">
-                    <button 
-                      onClick={() => deleteRepo(repo.id)}
-                      className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-[#0B1020] transition-colors"
-                      title="Remove Repository"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                    <div className="flex items-center gap-3">
-                      {isSyncingCurrent ? (
-                        <div className="flex items-center gap-2 text-xs font-semibold text-blue-400 bg-blue-950/20 px-3 py-1.5 rounded-lg border border-blue-900/30">
-                          <RefreshCw className="h-3.5 w-3.5 animate-spin" />
-                          Syncing {syncStatus.progress}%
-                        </div>
-                      ) : (
-                        <button 
-                          onClick={() => startSync(repo.id)}
-                          className="flex items-center gap-1 bg-[#1F2937]/50 hover:bg-[#1F2937] text-slate-300 hover:text-white px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#243041] transition-colors"
-                        >
-                          <RefreshCw className="h-3 w-3" /> Sync
-                        </button>
-                      )}
-                      <Link 
-                        href={`/repos/${repo.id}`}
-                        className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors"
+                    {/* Actions */}
+                    <div className="flex items-center justify-between mt-5 gap-3">
+                      <button 
+                        onClick={() => deleteRepo(repo.id)}
+                        className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-[#0B1020] transition-colors"
+                        title="Remove Repository"
                       >
-                        Deep Dive <ArrowRight className="h-3.5 w-3.5" />
-                      </Link>
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                      <div className="flex items-center gap-3">
+                        {isSyncingCurrent ? (
+                          <div className="flex items-center gap-2 text-xs font-semibold text-blue-400 bg-blue-950/20 px-3 py-1.5 rounded-lg border border-blue-900/30">
+                            <RefreshCw className="h-3.5 w-3.5 animate-spin" />
+                            Syncing {syncStatus.progress}%
+                          </div>
+                        ) : (
+                          <button 
+                            onClick={() => startSync(repo.id)}
+                            className="flex items-center gap-1 bg-[#1F2937]/50 hover:bg-[#1F2937] text-slate-300 hover:text-white px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#243041] transition-colors"
+                          >
+                            <RefreshCw className="h-3 w-3" /> Sync
+                          </button>
+                        )}
+                        <Link 
+                          href={`/repos/${repo.id}`}
+                          className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors"
+                        >
+                          Deep Dive <ArrowRight className="h-3.5 w-3.5" />
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                </article>
+                  </article>
+                </div>
               );
             })
           )}
